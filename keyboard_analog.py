@@ -47,12 +47,14 @@ def calculate_inputs():
     """
     Calculate the current input values for throttle, brake, left, and right
     """
-    return {
-        "throttle": get_input("throttle"),
-        "brake": get_input("brake"),
-        "left": get_input("left"),
-        "right": get_input("right")
-    }
+    throttle = get_input("throttle")
+    brake = get_input("brake")
+    steering_left = get_input("left")
+    steering_right = get_input("right")
+
+    steering = steering_right - steering_left  # Right is positive, left is negative
+
+    return throttle, brake, steering
 
 def on_press(key):
     """
@@ -93,9 +95,11 @@ def main():
 
         while listener.is_alive():
             throttle, brake, steering = calculate_inputs()
-            print(f"Throttle: {throttle:.2f}, Brake: {brake:.2f}, Steering: {steering}, end='\r', flush=True")
+            print(f"Throttle: {float(throttle):.2f}, Brake: {float(brake):.2f}, Steering: {float(steering):.2f}", end='\r', flush=True)
 
             #Exit when ESC is pressed
+            if keyboard.Key.esc in held_keys:
+                break
             #The listener also needs to stop
             #We'll handle that in the next version of the code
             import time
